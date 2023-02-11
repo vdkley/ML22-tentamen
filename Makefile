@@ -2,13 +2,15 @@
 .DEFAULT: run
 
 run:	
-	export PYTHONPATH="$$HOME/code/tentamen" ;poetry run python dev/scripts/01_model_design.py
-
+	export PYTHONPATH="$$HOME/code/ML22-tentamen" ;poetry run python dev/scripts/01_model_design.py
+rungru:	
+	export PYTHONPATH="$$HOME/code/ML22-tentamen" ;poetry run python dev/scripts/01_model_design_gru.py
 tune: 
-	export PYTHONPATH="$$HOME/code/tentamen" ;poetry run python dev/scripts/02_tune.py
-
+	export PYTHONPATH="$$HOME/code/ML22-tentamen" ;poetry run python dev/scripts/02_tune.py
+tunegru: 
+	export PYTHONPATH="$$HOME/code/ML22-tentamen" ;poetry run python dev/scripts/02_tune_gru.py
 result: 
-	export PYTHONPATH="$$HOME/code/tentamen" ;poetry run python dev/scripts/03_result.py
+	export PYTHONPATH="$$HOME/code/ML22-tentamen" ;poetry run python dev/scripts/03_result.py
 
 format:
 	poetry run isort dev

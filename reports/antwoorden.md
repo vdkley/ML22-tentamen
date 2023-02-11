@@ -1,4 +1,6 @@
 # Tentamen ML2022-2023
+*gemaakt door: Pascal van der Kley*
+
 
 De opdracht is om de audio van 10 cijfers, uitgesproken door zowel mannen als vrouwen, te classificeren. De dataset bevat timeseries met een wisselende lengte.
 
@@ -13,21 +15,60 @@ Het model in deze file heeft in de eerste hidden layer 100 units, in de tweede l
 De dropout staat op 0.5, hij heeft in een blog gelezen dat dit de beste settings voor dropout zou zijn.
 
 - Wat vind je van de architectuur die hij heeft uitgekozen (een Neuraal netwerk met drie Linear layers)? Wat zijn sterke en zwakke kanten van een model als dit in het algemeen? En voor dit specifieke probleem?
+
+**Antwoord:** 
+Veel data is niet linear, zo ook deze data die volgens de methode mel-frequency cepstrum (MFC) is opgeslagen waarbij een aantal niet lineare bewerking worden gedaan. Het kiezen voor uitsluitend lineare layers zal hier dus geen optimale classificatie opleveren. De sterke kanten van dit model is dat het eenvoudiger is waardoor het trainen sneller gaat. Verder kunnen de ruimtes (hyperplanes) niet gekromd worden naar de data waardoor de kans op overfitting in deze toepassing klein is. Je kunt dit lineare model goed gebruiken als baseline model zodat je goed kunt zien welke verbetering je daadwerkelijk haalt met een niet-linear model. 
+
+
 - Wat vind je van de keuzes die hij heeft gemaakt in de LinearConfig voor het aantal units ten opzichte van de data? En van de dropout?
+
+**Antwoord:**  
+Na de tweede lineare laag houdt hij maar 10 units over dat is de helft van het aantal de te classificeren output parameters. Hiermee wordt er dus ge-squeezed en daarna weer ge-expand waardoor er parameters opnieuw moet worden gereconstrueerd, hiermee word het model generalistischer. Het model kan hierdoor minder goed classificeren. Dit is de belangrijkste reden dat het model met deze configuratie maar tot 67% accuracy komt. Met de dropout na de tweede lineare laag van 50% maakt hij de overgebleven units nog generalistischer. Het aantal van 100 output units van de eerste laag (h1) lijkt me een redelijk aantal om vanuit 13 features 20 classes te voorspellen. Wanneer met dit lineare model het aantal units niet overdreven hoog word gekozen lijkt mij een dropout laag niet nodig omdat de kans op overfitting nihil is. 
+
+
 
 ## 1b
 Als je in de forward methode van het Linear model kijkt (in `tentamen/model.py`) dan kun je zien dat het eerste dat hij doet `x.mean(dim=1)` is. 
 
 - Wat is het effect hiervan? Welk probleem probeert hij hier op te lossen? (maw, wat gaat er fout als hij dit niet doet?)
+
+**Antwoord:** 
+Er worden 3 dimensies aangeboden (batch x timestaps x features) terwijl er twee nodig zijn (batchsize 128 x 13 input features). Door het gemiddele te nemen van dim 1 (timestaps) wordt deze ge-squeezed en dus verwijderd. Als dit niet gebeurt 
+
 - Hoe had hij dit ook kunnen oplossen?
+
+**Antwoord:** 
+Hij zou ook een 1 dimensionale convolution laag kunnen toevoegen om het aantal dimensies naar 2 te brengen (nn.Conv1d)
+
 - Wat zijn voor een nadelen van de verschillende manieren om deze stap te doen?
+
+**Antwoord:** 
+De door hem gekozen methode is eenvoudiger. Bij Conv1d moet je kiezen met welke kernal-size en stride meegeven.
+
 
 ### 1c
 Omdat jij de cursus Machine Learning hebt gevolgd kun jij hem uitstekend uitleggen wat een betere architectuur zou zijn.
 
 - Beschrijf de architecturen die je kunt overwegen voor een probleem als dit. Het is voldoende als je beschrijft welke layers in welke combinaties je zou kunnen gebruiken.
+
+**Antwoord:** 
+Dit probleem vraag typisch om een RNN oplossing aangezien het timeseries bevat. Het is een kleine dataset en in dat geval zal ik als eerste een GRU (Gated Recurrent Unit) overwegen. Een LSTM zou ook kunnen, maar GRU is nieuwer en efficienter en is meer geschikt voor kleinere datasets. GRU gebruikt minder parameters en is daardoor ook sneller te trainen. Ik zou dus een GRU layer gebruiken en afsluiten met een Linear layer of een Softmax layer om te komen tot de uiteindelijke classificatie voorspelling.
+
+
 - Geef vervolgens een indicatie en motivatie voor het aantal units/filters/kernelsize etc voor elke laag die je gebruikt, en hoe je omgaat met overgangen (bv van 3 naar 2 dimensies). Een indicatie is bijvoorbeeld een educated guess voor een aantal units, plus een boven en ondergrens voor het aantal units. Met een motivatie laat je zien dat jouw keuze niet een random selectie is, maar dat je 1) andere problemen hebt gezien en dit probleem daartegen kunt afzetten en 2) een besef hebt van de consquenties van het kiezen van een range.
+
+**Antwoord:** 
+hidden size: Het aantal units per GRU layer: deze zou ik kiezen tussen de 4 en 64, een hoger waarde lijkt mij niet passen bij de grote en complexiteit van deze dataset. In eerdere datasets zoals gestures die qua omvang en complexiteit vergelijkbaar was deze range ook afdoende om te onderzoeken. 
+layers: het aantal GRU layers dat gebruikt word: Hier zou ik kiezen voor 1, 2 of 3 lagen, ook gezien de geringe complexiteit en omvang.
+dropout: hiervoor zou ik zoals regulier gebruikt testen tussen de 0 en de 50% een wat hogere waarde voorkomt wellicht dat bij wat langer doortrainen er geen overfitting plaats vindt.
+overgang van 3 naar 2 dimensies: 
+
+
 - Geef aan wat jij verwacht dat de meest veelbelovende architectuur is, en waarom (opnieuw, laat zien dat je niet random getallen noemt, of keuzes maakt, maar dat jij je keuze baseert op ervaring die je hebt opgedaan met andere problemen).
+
+**Antwoord:** 
+Meest veelbelovend: GRU model met een hidden size van 16 en 2 of 3 layers en een dropout van 0.3. Groter hidden size of meer layers verwacht ik sneller overfitting bij het doortrainen.
+
 
 ### 1d
 Implementeer jouw veelbelovende model: 

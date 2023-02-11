@@ -159,4 +159,5 @@ def preprocessor(batch: List[Tuple]) -> Tuple[torch.Tensor, torch.Tensor]:
     X, y_ = zip(*batch)  # noqa: N806
     X = pad_sequence(X, batch_first=True)  # noqa: N806
     y = torch.tensor([mapping[label] for label in y_])
+
     return X, y
