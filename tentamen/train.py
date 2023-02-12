@@ -3,7 +3,6 @@ from pathlib import Path
 from typing import Callable, Dict, Iterator, List, Optional, Tuple
 
 import torch
-import json
 from loguru import logger
 from ray import tune
 from torch.utils.tensorboard import SummaryWriter

@@ -54,9 +54,6 @@ if __name__ == "__main__":
     # 96,5% hidden_size=64, num_layers=3, dropout=0.4
     # 95,8% hidden_size=32, num_layers=2, dropout=0.3
 
-
-
-
     for config in configs:
         model = AttentionGRU(config.dict())  # type: ignore
 
