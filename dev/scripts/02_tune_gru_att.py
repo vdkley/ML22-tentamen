@@ -10,7 +10,7 @@ from ray.tune.search.bohb import TuneBOHB
 
 from tentamen.data import datasets
 from tentamen.model import Accuracy, AttentionGRU
-from tentamen.settings import GRUSearchSpace, presets
+from tentamen.settings import AttentionGRUSearchSpace, presets
 from tentamen.train import trainloop
 
 
@@ -41,7 +41,7 @@ def train(config: Dict) -> None:
 if __name__ == "__main__":
     ray.init()
 
-    config = GRUSearchSpace(
+    config = AttentionGRUSearchSpace(
         input=13,
         output=20,
         tunedir=presets.logdir,

@@ -73,3 +73,9 @@ class AttentionGRUConfig(BaseSearchSpace):
     hidden_size: int
     num_layers: int
     dropout: float
+
+class AttentionGRUSearchSpace(BaseSearchSpace):
+    # hidden_size deelbaar door 4 i.v.m. aansluiting op num_heads van de Attention laag
+    hidden_size: Union[int, SAMPLE_INT] = tune.choice([i for i in range(32, 128+1) if i % 4 == 0])
+    num_layers: Union[int, SAMPLE_INT] = tune.randint(2, 4)
+    dropout: Union[float, SAMPLE_FLOAT] = tune.uniform(0.0, 0.2)

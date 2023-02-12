@@ -11,6 +11,8 @@ tune:
 	export PYTHONPATH="$$HOME/code/ML22-tentamen" ;poetry run python dev/scripts/02_tune.py
 tunegru: 
 	export PYTHONPATH="$$HOME/code/ML22-tentamen" ;poetry run python dev/scripts/02_tune_gru.py
+tunegruatt: 
+	export PYTHONPATH="$$HOME/code/ML22-tentamen" ;poetry run python dev/scripts/02_tune_gru_att.py
 result: 
 	export PYTHONPATH="$$HOME/code/ML22-tentamen" ;poetry run python dev/scripts/03_result.py
 
