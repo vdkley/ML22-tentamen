@@ -7,6 +7,8 @@ rungru:
 	export PYTHONPATH="$$HOME/code/ML22-tentamen" ;poetry run python dev/scripts/01_model_design_gru.py
 rungruatt:	
 	export PYTHONPATH="$$HOME/code/ML22-tentamen" ;poetry run python dev/scripts/01_model_design_gru_att.py
+runwin:
+	export PYTHONPATH="$$HOME/code/ML22-tentamen" ;poetry run python dev/scripts/2c_model_design.py
 tune: 
 	export PYTHONPATH="$$HOME/code/ML22-tentamen" ;poetry run python dev/scripts/02_tune.py
 tunegru: 

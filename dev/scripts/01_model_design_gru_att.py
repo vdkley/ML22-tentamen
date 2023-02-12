@@ -21,45 +21,26 @@ if __name__ == "__main__":
             input=13,
             output=20,
             tunedir=presets.logdir,
-            hidden_size=16,
-            num_layers=1,
-            dropout=0.1,
-        ),
-        AttentionGRUConfig(
-            input=13,
-            output=20,
-            tunedir=presets.logdir,
-            hidden_size=16,
+            hidden_size=100,
             num_layers=3,
-            dropout=0.1,
-        ),
-        AttentionGRUConfig(
-            input=13,
-            output=20,
-            tunedir=presets.logdir,
-            hidden_size=64,
-            num_layers=3,
-            dropout=0.1,
-        ),
-        AttentionGRUConfig(
-            input=13,
-            output=20,
-            tunedir=presets.logdir,
-            hidden_size=64,
-            num_layers=3,
-            dropout=0.5,
+            dropout=0.11447,
         ),
     ]
 
+    # handmatig:
     # 96,5% hidden_size=64, num_layers=3, dropout=0.4
     # 95,8% hidden_size=32, num_layers=2, dropout=0.3
+
+    # hypertune:
+    # 1e uit Hypertyne sessie 2 > 98,3 %: dropout=0.098019 hidden_size=96.000 num_layers=2.0000
+    # 2e uit Hypertyne sessie 2 > 97,8 %: dropout=0.11447 hidden_size=100.000 num_layers=3.0000 
+
 
     for config in configs:
         model = AttentionGRU(config.dict())  # type: ignore
 
         trainedmodel = trainloop(
-            config=config.dict(),
-            epochs=50,
+            epochs=500,
             model=model,  # type: ignore
             optimizer=torch.optim.Adam,
             learning_rate=1e-3,

@@ -66,10 +66,11 @@ if __name__ == "__main__":
         mode="min",
         progress_reporter=reporter,
         local_dir=config.tunedir,
-        num_samples=20,
+        num_samples=50,
         search_alg=bohb_search,
         scheduler=bohb_hyperband,
         verbose=1,
+        max_concurrent_trials = 1
     )
 
     ray.shutdown()

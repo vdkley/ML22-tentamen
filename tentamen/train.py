@@ -58,7 +58,6 @@ def evalbatches(
 
 
 def trainloop(
-    config: dict,
     epochs: int,
     model: GenericModel,
     optimizer: Callable,

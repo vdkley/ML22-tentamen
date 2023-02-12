@@ -99,7 +99,7 @@ Verder valt op dat binnen deze 50 training epochs er (nog) geen overfitting plaa
   <p align = "center">
     <img src="img/accuracy_1d_gru_attention.png" style="width:100%">
     <figcaption align="center">
-      <b> Fig 1. Accuracy 4 parameter combinations in GRU Attention model</b>
+      <b> Fig 1. Accuracy 4 parameter-combinations in GRU-Attention model</b>
     </figcaption>
   </p>
 </figure>
@@ -129,10 +129,64 @@ Implementeer de hypertuning voor jouw architectuur:
 - Analyseer de resultaten van jouw hypertuning; visualiseer de parameters van jouw hypertuning en sla het resultaat van die visualisatie op in `reports/img`. Suggesties: `parallel_coordinates` kan handig zijn, maar een goed gekozen histogram of scatterplot met goede kleuren is in sommige situaties duidelijker! Denk aan x en y labels, een titel en units voor de assen.
 - reflecteer op de hypertuning. Wat werkt wel, wat werkt niet, wat vind je verrassend, wat zijn trade-offs die je ziet in de hypertuning, wat zijn afwegingen bij het kiezen van een uiteindelijke hyperparametersetting.
 
+**Antwoord:**
+
+Op basis van de bevindingen tijdens het handmating trainen bij vraag 1d zagen we dat de hidden_size van 64 beter presteerde dan 16. In de eerste hypertune sessie heb ik daarom gekozen om te zoeken tussen 32 en 128 (hidden_size).
+
+Verder zagen we in de handmatigen training dat een dropout van 0.1 of 0.5 weinig verschil maakte. Dit terwijl een dropout van 0.5 al exeptioneel hoog is. Daarom heb ik gekozen om met de hypertuning te gaan zoeken tussen de 0 en 0.2.
+
+Het zoeken van het aantal layers heb ik gekozen tussen 2 en 3 omdat er in de handmating training een kleine verbetering te zien was bij 2 layers in plaast van 1. Een hoger waarde dan 3 levert een voor nu traag en er complex model op waardoor ik heb gekozen om niet hoger te gaan zoeken dan 3 layers.
+
+Uit onderstaande parallel plot (Fig. 3) zien we dat de pogingen met een hoge Accuracy allemaal een hidden_size van tussen de 80 en 110 hebben. Verder bevindt zich de dropout hierbij tussen 0.07 en de 0.18. 
+
+Met deze informatie heb ik een tweede hypertuning gedaan om gedetailleerder te zoeken binnen deze goed scorende parameters. (Fig. 4). Hier
+
+
+
+<figure>
+  <p align = "center">
+    <img src="img/hypertune_parallel_plot_1.png" style="width:100%">
+    <figcaption align="center">
+      <b> Fig 3. Hypertune eerste sesie</b>
+    </figcaption>
+  </p>
+</figure>
+
+
+<figure>
+  <p align = "center">
+    <img src="img/hypertyne_parallel_plot_2.png" style="width:100%">
+    <figcaption align="center">
+      <b> Fig 4. Hypertune tweede sesie</b>
+    </figcaption>
+  </p>
+</figure>
+
+
+
 Importeer de afbeeldingen in jouw antwoorden, reflecteer op je experiment, en geef een interpretatie en toelichting op wat je ziet.
 
 ### 2c
 - Zorg dat jouw prijswinnende settings in een config komen te staan in `settings.py`, en train daarmee een model met een optimaal aantal epochs, daarvoor kun je `01_model_design.py` kopieren en hernoemen naar `2c_model_design.py`.
+
+prijswinnende model: 
+- Accuracy: 97,9 %
+- Layers: GRU + Attention
+- Epochs: 100
+- Hidden size: 96
+- Layers: 2
+- Dropout: 0.098019
+
+<figure>
+  <p align = "center">
+    <img src="img/pricewinning_model.png" style="width:100%">
+    <figcaption align="center">
+      <b> Fig 4. Loss/test en Accuracy van het prijswinnende model</b>
+    </figcaption>
+  </p>
+</figure>
+
+
 
 ## Vraag 3
 ### 3a
