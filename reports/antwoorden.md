@@ -33,7 +33,7 @@ Als je in de forward methode van het Linear model kijkt (in `tentamen/model.py`)
 - Wat is het effect hiervan? Welk probleem probeert hij hier op te lossen? (maw, wat gaat er fout als hij dit niet doet?)
 
 **Antwoord:** 
-Er worden 3 dimensies aangeboden (batch x timestaps x features) terwijl er twee nodig zijn (batchsize 128 x 13 input features). Door het gemiddele te nemen van dim 1 (timestaps) wordt deze ge-squeezed en dus verwijderd. Als dit niet gebeurt 
+Er worden 3 dimensies aangeboden (batch x timestaps x features) terwijl de eerste lineare laag twee dimensies nodig heeft (batchsize 128 x 13 input features). Door het gemiddele te nemen van dim 1 (timestaps) wordt deze ge-squeezed en dus verwijderd. 
 
 - Hoe had hij dit ook kunnen oplossen?
 
@@ -52,22 +52,22 @@ Omdat jij de cursus Machine Learning hebt gevolgd kun jij hem uitstekend uitlegg
 - Beschrijf de architecturen die je kunt overwegen voor een probleem als dit. Het is voldoende als je beschrijft welke layers in welke combinaties je zou kunnen gebruiken.
 
 **Antwoord:** 
-Dit probleem vraag typisch om een RNN oplossing aangezien het timeseries bevat. Het is een kleine dataset en in dat geval zal ik als eerste een GRU (Gated Recurrent Unit) overwegen. Een LSTM zou ook kunnen, maar GRU is nieuwer en efficienter en is meer geschikt voor kleinere datasets. GRU gebruikt minder parameters en is daardoor ook sneller te trainen. Ik zou dus een GRU layer gebruiken en afsluiten met een Linear layer of een Softmax layer om te komen tot de uiteindelijke classificatie voorspelling.
+Dit probleem vraag typisch om een RNN oplossing aangezien het timeseries bevat. Het is een kleine dataset en in dat geval zal ik als eerste een GRU (Gated Recurrent Unit) overwegen. Een LSTM zou ook kunnen, maar GRU is nieuwer en efficienter en is meer geschikt voor kleinere datasets. GRU gebruikt minder parameters en is daardoor ook sneller te trainen. Ik zou dus een GRU layer gebruiken gevolgd door een attantion layer en afsluiten met een Linear layer of een Softmax layer om te komen tot de uiteindelijke classificatie voorspelling. Door een attention laag toe te voegen worden bepaalde delen in de timeseries met een andere weging meegenomen (aandacht) en daardoor kan er wellicht een hogere accuracy word gehaald.
 
 
 - Geef vervolgens een indicatie en motivatie voor het aantal units/filters/kernelsize etc voor elke laag die je gebruikt, en hoe je omgaat met overgangen (bv van 3 naar 2 dimensies). Een indicatie is bijvoorbeeld een educated guess voor een aantal units, plus een boven en ondergrens voor het aantal units. Met een motivatie laat je zien dat jouw keuze niet een random selectie is, maar dat je 1) andere problemen hebt gezien en dit probleem daartegen kunt afzetten en 2) een besef hebt van de consquenties van het kiezen van een range.
 
 **Antwoord:** 
-hidden size: Het aantal units per GRU layer: deze zou ik kiezen tussen de 4 en 64, een hoger waarde lijkt mij niet passen bij de grote en complexiteit van deze dataset. In eerdere datasets zoals gestures die qua omvang en complexiteit vergelijkbaar was deze range ook afdoende om te onderzoeken. 
-layers: het aantal GRU layers dat gebruikt word: Hier zou ik kiezen voor 1, 2 of 3 lagen, ook gezien de geringe complexiteit en omvang.
-dropout: hiervoor zou ik zoals regulier gebruikt testen tussen de 0 en de 50% een wat hogere waarde voorkomt wellicht dat bij wat langer doortrainen er geen overfitting plaats vindt.
+hidden size: Het aantal units per GRU layer: deze zou ik kiezen tussen de 16 en 64, een hoger waarde lijkt mij niet passen bij geringe grote en complexiteit van deze dataset. In eerdere datasets zoals gestures die qua omvang en complexiteit vergelijkbaar was deze range ook afdoende om te onderzoeken. 
+layers: het aantal GRU layers dat gebruikt word: Hier zou ik kiezen voor 2 of 3 lagen, ook gezien de geringe complexiteit en omvang. Bij meer lagen wordt het model erg complex met erg veel parameters. Dit past niet bij de compelxiteit van de dataset en zorgt voor onnodige capaciteit bij het trainen en kan zorgen voor overfitting (memoreseren van de data in het model).
+dropout: hiervoor verwacht ik dat een waarde tussen 0 en de 30% goed is om te onderzoeken. Een wat hogere waarde voorkomt wellicht dat bij wat langer doortrainen er geen overfitting plaats vindt.
 overgang van 3 naar 2 dimensies: 
 
 
 - Geef aan wat jij verwacht dat de meest veelbelovende architectuur is, en waarom (opnieuw, laat zien dat je niet random getallen noemt, of keuzes maakt, maar dat jij je keuze baseert op ervaring die je hebt opgedaan met andere problemen).
 
 **Antwoord:** 
-Meest veelbelovend: GRU model met een hidden size van 16 en 2 of 3 layers en een dropout van 0.3. Groter hidden size of meer layers verwacht ik sneller overfitting bij het doortrainen.
+Meest veelbelovend: GRU model met een attention laag met een hidden size van 64 en 2 of 3 layers en een dropout van 0.3. Grotere hidden size of meer layers verwacht ik sneller overfitting bij het doortrainen. In de antwoorden hierboven 
 
 
 ### 1d
@@ -79,13 +79,36 @@ Implementeer jouw veelbelovende model:
 - Rapporteer je bevindingen. Ga hier niet te uitgebreid hypertunen (dat is vraag 2), maar rapporteer (met een afbeelding in `antwoorden/img` die je linkt naar jouw .md antwoord) voor bijvoorbeeld drie verschillende parametersets hoe de train/test loss curve verloopt.
 - reflecteer op deze eerste verkenning van je model. Wat valt op, wat vind je interessant, wat had je niet verwacht, welk inzicht neem je mee naar de hypertuning.
 
-Hieronder een voorbeeld hoe je een plaatje met caption zou kunnen invoegen.
+**Antwoord:** 
+Om er achter te komen welke paramaters welke invloed hebben, heb ik gekozen om onderstaande 4 combinaties te trainen op mijn veelbelovende GRU-Attention model:
+
+- hidden_size=16, num_layers=1, dorpout=0.1
+- hidden_size=16, num_layers=3, dorpout=0.1
+- hidden_size=64, num_layers=3, dorpout=0.1
+- hidden_size=64, num_layers=3, dorpout=0.5
+
+In de Tensorboard weergave van deze resultaten (zie Fig 1. en Fig. 2 hieronder) merk ik op dat de hidden_size van de GRU laag meer invloed geeft op een beter resultaat dan het aantal layers. Het is aan te bevelen om in de hypertuning de hidden_size met nog wat grotere waarden te verkennen. 
+
+In de eerste twee train sessies valt op te merken dat het aantal GRU layers (num_layers) een kleine verbetering geeft op de Accuracy van de voorspelling.
+
+In de laatste twee train sessies heb ik de dropout 0.1 en 0.5 verkend. Het valt hier op dat deze nauwelijks resultaat verschillen opleveren. Het valt aan te bevelen om in de hypertuning de dropout waarde tussen de 0 en 0.1 ook te verkennen.
+
+Verder valt op dat binnen deze 50 training epochs er (nog) geen overfitting plaatsvind. De tweede trainingssessie zie je dat de learning_rate constant blijft. Deze configuratie zouden we nog wat langer kunnen doortrainen om te verkennen of met een afnemende learning_rate het resultaat nog verder kan verbeteren.
 
 <figure>
   <p align = "center">
-    <img src="img/motivational.png" style="width:50%">
+    <img src="img/accuracy_1d_gru_attention.png" style="width:100%">
     <figcaption align="center">
-      <b> Fig 1.Een motivational poster voor studenten Machine Learning (Stable Diffusion)</b>
+      <b> Fig 1. Accuracy 4 parameter combinations in GRU Attention model</b>
+    </figcaption>
+  </p>
+</figure>
+
+<figure>
+  <p align = "center">
+    <img src="img/train_test_1d_gru_attentions.png" style="width:100%">
+    <figcaption align="center">
+      <b> Fig 2. Train/Test Loss 4 parameter combinations in GRU Attention model</b>
     </figcaption>
   </p>
 </figure>

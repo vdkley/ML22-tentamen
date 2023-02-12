@@ -5,6 +5,8 @@ run:
 	export PYTHONPATH="$$HOME/code/ML22-tentamen" ;poetry run python dev/scripts/01_model_design.py
 rungru:	
 	export PYTHONPATH="$$HOME/code/ML22-tentamen" ;poetry run python dev/scripts/01_model_design_gru.py
+rungruatt:	
+	export PYTHONPATH="$$HOME/code/ML22-tentamen" ;poetry run python dev/scripts/01_model_design_gru_att.py
 tune: 
 	export PYTHONPATH="$$HOME/code/ML22-tentamen" ;poetry run python dev/scripts/02_tune.py
 tunegru: 
@@ -28,5 +30,8 @@ lint:
 clean:
 	rm -rf logs/*
 	rm -rf models/*
+
+tensorboard:
+	poetry run tensorboard --logdir=logs/
 
 

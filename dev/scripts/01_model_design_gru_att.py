@@ -13,31 +13,56 @@ if __name__ == "__main__":
 
     trainstreamer, teststreamer = datasets.get_arabic(presets)
 
-    from tentamen.model import GRUmodel
-    from tentamen.settings import GRUConfig
+    from tentamen.model import AttentionGRU
+    from tentamen.settings import AttentionGRUConfig
 
     configs = [
-        GRUConfig(
+        AttentionGRUConfig(
+            input=13,
+            output=20,
+            tunedir=presets.logdir,
+            hidden_size=16,
+            num_layers=1,
+            dropout=0.1,
+        ),
+        AttentionGRUConfig(
+            input=13,
+            output=20,
+            tunedir=presets.logdir,
+            hidden_size=16,
+            num_layers=3,
+            dropout=0.1,
+        ),
+        AttentionGRUConfig(
             input=13,
             output=20,
             tunedir=presets.logdir,
             hidden_size=64,
             num_layers=3,
-            dropout=0.4,
+            dropout=0.1,
+        ),
+        AttentionGRUConfig(
+            input=13,
+            output=20,
+            tunedir=presets.logdir,
+            hidden_size=64,
+            num_layers=3,
+            dropout=0.5,
         ),
     ]
 
-    # 94% ==> hidden_size=16, num_layers=2, dropout=0.3
-    # 97,2% hidden_size=32, num_layers=3, dropout=0.3
-    # 96,2% hidden_size=64, num_layers=3, dropout=0.3
-    # 97% hidden_size=64, num_layers=3, dropout=0.4
+    # 96,5% hidden_size=64, num_layers=3, dropout=0.4
+    # 95,8% hidden_size=32, num_layers=2, dropout=0.3
+
+
+
 
     for config in configs:
-        model = GRUmodel(config.dict())  # type: ignore
+        model = AttentionGRU(config.dict())  # type: ignore
 
         trainedmodel = trainloop(
             config=config.dict(),
-            epochs=500,
+            epochs=50,
             model=model,  # type: ignore
             optimizer=torch.optim.Adam,
             learning_rate=1e-3,
