@@ -29,7 +29,7 @@ class Linear(nn.Module):
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        x = x.mean(dim=1)
+        x = x.sum(dim=1)
         x = self.encoder(x)
         return x
 
