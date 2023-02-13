@@ -34,13 +34,13 @@ presets = Settings(
     logdir=root / "logs",
     modelname="model.pt",
     batchsize=128,
-    winningsettings = {
-        "input" : 13,
-        "output" : 20,
-        "hidden_size" : 96,
-        "num_layers" : 2,
-        "dropout": 0.098019
-    }
+    winningsettings={
+        "input": 13,
+        "output": 20,
+        "hidden_size": 96,
+        "num_layers": 2,
+        "dropout": 0.098019,
+    },
 )
 
 
@@ -82,8 +82,11 @@ class AttentionGRUConfig(BaseSearchSpace):
     num_layers: int
     dropout: float
 
+
 class AttentionGRUSearchSpace(BaseSearchSpace):
     # hidden_size deelbaar door 4 i.v.m. aansluiting op num_heads van de Attention laag
-    hidden_size: Union[int, SAMPLE_INT] = tune.choice([i for i in range(80, 116) if i % 4 == 0])
+    hidden_size: Union[int, SAMPLE_INT] = tune.choice(
+        [i for i in range(80, 116) if i % 4 == 0]
+    )
     num_layers: Union[int, SAMPLE_INT] = tune.randint(2, 4)
     dropout: Union[float, SAMPLE_FLOAT] = tune.uniform(0.07, 0.18)

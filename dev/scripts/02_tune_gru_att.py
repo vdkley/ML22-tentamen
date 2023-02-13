@@ -70,7 +70,7 @@ if __name__ == "__main__":
         search_alg=bohb_search,
         scheduler=bohb_hyperband,
         verbose=1,
-        max_concurrent_trials = 1
+        max_concurrent_trials=1,
     )
 
     ray.shutdown()
