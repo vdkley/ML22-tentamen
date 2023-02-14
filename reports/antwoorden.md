@@ -17,7 +17,7 @@ De dropout staat op 0.5, hij heeft in een blog gelezen dat dit de beste settings
 - Wat vind je van de architectuur die hij heeft uitgekozen (een Neuraal netwerk met drie Linear layers)? Wat zijn sterke en zwakke kanten van een model als dit in het algemeen? En voor dit specifieke probleem?
 
 **Antwoord:** 
-> Veel data is niet linear, zo ook deze audio data die volgens de methode mel-frequency cepstrum (MFC) is opgeslagen waarbij een aantal niet lineare bewerking nodig zijn om deze data op te slaan. Met de ReLu activatie lagen die steeds na de lineare laag wordt gebruikt wordt de ruimte krom getrokken en kan er met dit model niet-lineare data worden getraind. Echter, omdat deze data uit squentele tijdseries bestaat kan er context over deze tijdstappen belangrijke informatie zijn. In dit geval zou het beter zijn om een model te gebruiken waar doormiddel van hidden states context over de tijdserie wordt meegenomen. De sterke kanten van dit model is dat het eenvoudig is waardoor het trainen sneller gaat en er weinig kans is op overfitting. Je kunt dit lineare model goed gebruiken als baseline model zodat je goed kunt zien welke verbetering je daadwerkelijk haalt met een niet-linear model. 
+> Veel data is niet linear, zo ook deze audio data die volgens de methode mel-frequency cepstrum (MFC) is opgeslagen waarbij een aantal niet lineare bewerking nodig zijn om deze data op te slaan. Met de ReLu activatie lagen die steeds na de lineare laag wordt gebruikt wordt de ruimte krom getrokken en kan er met dit model niet-lineare data worden getraind. Echter, omdat deze data uit squentele tijdseries bestaat kan er context over deze tijdstappen belangrijke informatie zijn. In dit geval zou het beter zijn om een model te gebruiken waar doormiddel van hidden states context over de tijdserie wordt meegenomen. De sterke kanten van dit model is dat het eenvoudig is waardoor het trainen sneller gaat en er weinig kans is op overfitting. Je kunt dit lineare model goed gebruiken als baseline model zodat je goed kunt zien welke verbetering je daadwerkelijk haalt met een complexer model. 
 
 
 - Wat vind je van de keuzes die hij heeft gemaakt in de LinearConfig voor het aantal units ten opzichte van de data? En van de dropout?
@@ -107,7 +107,7 @@ Implementeer jouw veelbelovende model:
 > 
 > In de laatste twee train sessies heb ik de dropout 0.1 en 0.5 verkend. Het valt hier op dat deze nauwelijks resultaat verschillen opleveren. Het valt daarom aan te bevelen om in de hypertuning de dropout waarde tussen de 0 en 0.1 ook te verkennen.
 > 
-> Verder valt op dat binnen deze 50 training epochs er (nog) geen overfitting plaatsvind. De tweede trainingssessie zie je dat de learning_rate constant blijft. Deze configuratie zouden we nog wat langer kunnen doortrainen om te verkennen of met een afnemende learning_rate het resultaat nog verder kan verbeteren.
+> Verder valt op dat binnen deze 50 training epochs er (nog) geen overfitting plaatsvind. Dit zie je aan de redelijk vlak lopende Accuracy en de vlak lopende Test/Loss. De tweede trainingssessie zie je dat de learning_rate constant blijft. Deze configuratie zouden we nog wat langer kunnen doortrainen om te verkennen of met een afnemende learning_rate het resultaat nog verder kan verbeteren.
 
 <figure>
   <p align = "center">
