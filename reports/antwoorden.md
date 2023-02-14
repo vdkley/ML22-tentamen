@@ -107,7 +107,7 @@ Implementeer jouw veelbelovende model:
 > 
 > In de laatste twee train sessies heb ik de dropout 0.1 en 0.5 verkend. Het valt hier op dat deze nauwelijks resultaat verschillen opleveren. Het valt daarom aan te bevelen om in de hypertuning de dropout waarde tussen de 0 en 0.1 ook te verkennen.
 > 
-> Verder valt op dat binnen deze 50 training epochs er (nog) geen overfitting plaatsvind. Dit zie je aan de redelijk vlak lopende Accuracy en de vlak lopende Test/Loss. De tweede trainingssessie zie je dat de learning_rate constant blijft. Deze configuratie zouden we nog wat langer kunnen doortrainen om te verkennen of met een afnemende learning_rate het resultaat nog verder kan verbeteren.
+> Verder valt op dat binnen deze 50 training epochs er (nog) geen overfitting plaatsvind. Dit zie je aan de redelijk vlak lopende Accuracy en de vlak lopende Test/Loss.
 
 <figure>
   <p align = "center">
